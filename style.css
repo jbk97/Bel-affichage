@@ -1,0 +1,468 @@
+/* Palette du drapeau lesbien (à titre indicatif pour les développeurs)
+    Rose foncé : #A30062 (similaire à un magenta foncé)
+    Rose moyen : #D0639F
+    Blanc/Crème : #FFFFFF / #F9F4E9 (pour le fond principal et le texte clair)
+    Orange moyen : #FF8B00 (similaire à un orange vif)
+    Orange foncé : #CC6F00
+    Gris/Noir pour le texte principal : #333333, #5e0889 (votre violet actuel est proche)
+*/
+
+body {
+    font-family: "futura-lt-w01-book", Arial, sans-serif; /* Application de la police Futura */
+    margin: 0;
+    padding: 10px; /* Réduction du padding général pour plus d'espace */
+    background-color: #f9f4e9; /* Fond général : Crème */
+    color: #333333; /* Texte principal : Gris foncé */
+    box-sizing: border-box; /* S'assurer que padding et border sont inclus dans la largeur/hauteur */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f9f4e9; /* Fond du conteneur : Crème */
+    padding: 15px; /* Ajustement du padding du conteneur */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+    color: #A30062; /* Titre principal : Rose foncé */
+    margin-bottom: 30px;
+    font-size: 2.2em;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f9f4e9; /* Fond des filtres : Crème */
+    border-radius: 5px;
+    border: 1px solid #D0639F; /* Bordure des filtres : Rose moyen */
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #A30062; /* Texte des labels : Rose foncé */
+}
+
+.filters select,
+.filters input[type="date"] {
+    padding: 8px;
+    border: 1px solid #D0639F; /* Bordure des champs de filtre : Rose moyen */
+    border-radius: 4px;
+    font-size: 16px;
+    min-width: 180px;
+    background-color: #fff; /* Fond des champs de filtre : Blanc */
+    color: #333333; /* Texte des champs de filtre : Gris foncé */
+}
+
+.events-list {
+    display: grid;
+    /* MODIFIÉ : Par défaut, plusieurs colonnes pour les grands écrans (PC) */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px; /* Espacement entre les cartes */
+    padding: 0;
+    list-style: none;
+}
+
+/* Nouveaux styles pour l'effet de retournement (Flip Card) */
+
+/* Conteneur pour la carte qui gère la perspective */
+.event-card-container {
+    perspective: 1000px; /* Donne une profondeur 3D pour l'effet de retournement */
+    height: auto; /* La hauteur s'adaptera au contenu */
+    min-height: 280px; /* Rétabli un min-height raisonnable pour le desktop. Le contenu s'étendra au-delà si nécessaire. */
+    margin-bottom: 15px; /* Pour séparer les cartes retournées */
+    position: relative;
+    transition: min-height 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); /* Conserve la transition pour une éventuelle gestion dynamique ou simplement l'expansion naturelle */
+}
+
+/* La carte elle-même, qui va "fliper" */
+.event-card {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Prend toute la hauteur du conteneur */
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); /* Transition fluide pour le retournement */
+    transform-style: preserve-3d; /* Permet aux enfants d'être positionnés en 3D */
+    border: 1px solid #D0639F;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+/* L'état de retournement */
+.event-card.flipped {
+    transform: rotateY(180deg);
+}
+
+/* Les faces avant et arrière de la carte */
+.event-card-front,
+.event-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Cache la face arrière quand elle est tournée */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 8px; /* Garde les coins arrondis */
+    top: 0;
+    left: 0;
+    overflow: hidden; /* Cache le contenu qui dépasse */
+}
+
+.event-card-front {
+    background-color: #FFFFFF; /* Fond de la face avant */
+    z-index: 2; /* S'assure que la face avant est au-dessus par défaut */
+    padding-right: 25px; /* Espace pour la bande verticale */
+    /* La bande verticale est directement sur .event-card-front */
+}
+
+/* Bande verticale subtile sur le côté droit de la face avant */
+.event-card-front::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px; /* Largeur de la bande */
+    height: 100%;
+    background: linear-gradient(to bottom, #FF8B00, #D0639F, #FFFFFF, #D0639F, #A30062); /* Dégradé de couleurs du drapeau lesbien */
+    border-radius: 0 8px 8px 0; /* Coins arrondis seulement à droite */
+}
+
+.event-card-back {
+    background-color: #fcebeb; /* Fond de la description : très clair tirant vers le rose */
+    transform: rotateY(180deg); /* La face arrière est déjà tournée de 180 degrés */
+    justify-content: space-between; /* Pour pousser le bouton "Retour" en bas */
+    text-align: left; /* Texte de description à gauche */
+    overflow-y: auto; /* Permet le défilement si la description est longue */
+    /* Border et shadow sont gérées par .event-card */
+}
+
+.event-image-container {
+    width: 100%;
+    max-height: 150px; /* Hauteur maximale pour les images dans la carte */
+    overflow: hidden;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eee; /* Placeholder background */
+}
+
+.event-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Assure que l'image couvre le conteneur sans déformation */
+}
+
+.event-header {
+    display: flex;
+    align-items: flex-start; /* Alignement du haut pour la date et le titre */
+    gap: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.event-date-box {
+    flex-shrink: 0;
+    width: 70px; /* Taille légèrement réduite pour compacité */
+    height: 70px;
+    background: linear-gradient(to bottom, #A30062, #CC6F00); /* Dégradé rose foncé à orange foncé */
+    color: #f9f4e9; /* Texte crème pour la date */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-align: center;
+    line-height: 1.2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Petite ombre pour faire ressortir */
+}
+
+.event-date-box .month {
+    font-size: 0.75em;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+.event-date-box .day {
+    font-size: 1.6em;
+}
+
+.event-main-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* Alignement du texte à gauche */
+}
+
+.event-main-info h2 {
+    margin: 0;
+    font-size: 1.2em; /* Taille du nom de l'événement */
+    color: #A30062; /* Couleur du nom de l'événement : Rose foncé */
+    line-height: 1.3;
+    font-weight: bold;
+}
+
+.event-meta-info {
+    font-size: 0.9em;
+    color: #555555; /* Gris foncé pour le type et la ville */
+    margin-top: 5px;
+}
+
+.event-meta-info .type {
+    font-style: italic;
+    color: #D0639F; /* Rose moyen pour le type */
+}
+
+.event-meta-info .separator {
+    margin: 0 5px;
+    color: #bbb;
+}
+
+.event-description-content { /* Pour le contenu réel de la description sur la face arrière */
+    width: 100%;
+    color: #333333;
+    font-size: 0.9em;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    /* Ajustement du padding si nécessaire pour la scrollbar */
+}
+
+.event-description-content h3 {
+    margin-top: 0;
+    color: #A30062; /* Rose foncé pour le titre de la description */
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+/* Le bouton "Plus d'infos" sur la face avant */
+.toggle-description-btn {
+    background: none;
+    border: none;
+    color: #D0639F; /* Rose moyen */
+    cursor: pointer;
+    font-size: 0.85em;
+    text-decoration: underline;
+    padding: 0;
+    transition: color 0.2s;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+}
+
+.toggle-description-btn:hover {
+    color: #A30062; /* Rose foncé au survol */
+}
+
+/* Styles pour le bouton "Retour" sur la face arrière */
+.toggle-description-btn.back-btn {
+    margin-top: 15px; /* Espace après la description */
+    text-decoration: none; /* Pas de soulignement par défaut */
+    padding: 8px 15px;
+    background-color: #D0639F; /* Rose moyen */
+    color: #FFFFFF; /* Texte blanc */
+    border-radius: 5px;
+    font-weight: bold;
+    display: inline-block; /* Pour qu'il ne prenne pas toute la largeur */
+}
+
+.toggle-description-btn.back-btn:hover {
+    background-color: #A30062; /* Rose foncé au survol */
+    color: #FFFFFF; /* S'assurer que le texte reste blanc */
+}
+
+.event-actions {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto; /* Pousse les boutons en bas de la face avant */
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+    width: 100%;
+}
+
+.event-link {
+    flex-grow: 1;
+    padding: 10px 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    white-space: nowrap;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    font-size: 0.9em;
+}
+
+.event-link.reserve-btn { /* Bouton "Réserver" */
+    background: linear-gradient(to right, #A30062, #D0639F); /* Dégradé de rose foncé à rose moyen */
+    color: #FFFFFF; /* Texte blanc pour meilleure lisibilité sur le dégradé */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.event-link.reserve-btn:hover {
+    background: linear-gradient(to right, #D0639F, #A30062); /* Dégradé de rose moyen à rose foncé au survol */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    color: #FFFFFF; /* S'assurer que le texte reste blanc au survol */
+}
+
+/* Cacher l'ancienne description div qui n'est plus utilisée */
+.event-description {
+    display: none !important;
+}
+
+/* --- OPTIMISATIONS MEDIA QUERIES pour la compacité et 1 colonne sur mobile --- */
+
+/* Par défaut, .events-list affiche plusieurs colonnes.
+   C'est cette media query qui va forcer 1 colonne sur mobile. */
+@media (max-width: 767px) {
+    body {
+        padding: 5px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+    }
+
+    .filters {
+        flex-direction: column;
+        align-items: stretch; /* Les éléments prennent toute la largeur */
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .filter-group {
+        width: 100%;
+        align-items: flex-start; /* Aligne les labels et inputs à gauche */
+    }
+
+    .filters select,
+    .filters input[type="date"] {
+        width: 100%; /* Prend toute la largeur disponible */
+        max-width: none; /* Supprime la limite max-width */
+        padding: 10px;
+        font-size: 1em;
+        box-sizing: border-box; /* S'assurer que le padding est inclus dans la largeur */
+    }
+
+    .events-list {
+        grid-template-columns: 1fr; /* MODIFIÉ : Force UNE seule colonne sur les écrans <= 767px */
+        gap: 10px; /* Réduction de l'espace entre les cartes pour plus de densité */
+    }
+
+    .event-card-container {
+        min-height: 200px; /* Rétablit un min-height pour mobile, car la carte est plus étroite */
+        margin-bottom: 10px;
+    }
+
+    .event-card-front, .event-card-back {
+        padding: 10px;
+        padding-right: 20px; /* Garde l'espace pour la bande */
+        gap: 8px; /* Espacement réduit entre les éléments internes */
+        text-align: left; /* Aligner le texte à gauche par défaut sur mobile pour plus de lisibilité */
+    }
+
+    .event-card-front::after {
+        width: 6px;
+    }
+
+    .event-image-container {
+        max-height: 100px; /* Hauteur d'image encore plus petite sur mobile pour compacité */
+        margin-bottom: 8px;
+    }
+
+    .event-header {
+        flex-direction: row; /* Date et info côte à côte sur la plupart des mobiles */
+        align-items: center; /* Centrer verticalement les éléments du header */
+        gap: 8px;
+        margin-bottom: 8px;
+        width: 100%; /* S'assurer qu'il prend la largeur pour un bon alignement */
+    }
+
+    .event-date-box {
+        width: 55px; /* Taille réduite pour la date */
+        height: 55px;
+        font-size: 0.9em;
+        margin-bottom: 0; /* Pas de marge en bas */
+    }
+    .event-date-box .day {
+        font-size: 1.3em;
+    }
+
+    .event-main-info {
+        flex-grow: 1; /* Permet au texte de prendre l'espace restant */
+        text-align: left; /* Assurer que le texte est aligné à gauche */
+    }
+
+    .event-main-info h2 {
+        font-size: 1.0em; /* Taille légèrement plus petite */
+        margin: 0; /* Réinitialiser les marges */
+    }
+    .event-meta-info {
+        font-size: 0.75em; /* Taille encore plus petite pour les métadonnées */
+        margin-top: 2px; /* Petite marge au-dessus */
+    }
+
+    .event-actions {
+        flex-direction: column; /* Empile les boutons */
+        gap: 8px;
+        margin-top: 10px;
+        align-items: center; /* Centrer les boutons empilés */
+    }
+
+    .event-link {
+        width: 90%; /* Boutons prennent plus de largeur */
+        max-width: 200px; /* Limite la largeur des boutons */
+        padding: 8px 0; /* Padding ajusté */
+        font-size: 0.85em; /* Police plus petite */
+    }
+
+    .toggle-description-btn {
+        font-size: 0.75em;
+        text-align: center; /* Centrer le bouton "Plus d'infos" */
+        width: 100%; /* Prend toute la largeur si empilé */
+    }
+
+    .event-description-content h3 {
+        font-size: 0.95em;
+    }
+
+    .event-description-content p {
+        font-size: 0.75em;
+    }
+
+    .toggle-description-btn.back-btn {
+        padding: 6px 12px;
+        font-size: 0.75em;
+    }
+}
+
+/* Anciennes media queries supprimées car le comportement est maintenant géré par le défaut et la @media (max-width: 767px) */
+/*
+@media (min-width: 600px) and (max-width: 991px) { ... }
+@media (min-width: 480px) and (max-width: 767px) { ... }
+@media (min-width: 992px) { ... }
+*/
