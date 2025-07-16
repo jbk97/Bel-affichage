@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda d'Événements en France</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Agenda d'Événements en France</h1>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label for="date-filter">Filtrer par Date :</label>
+                <input type="date" id="date-filter">
+            </div>
+
+            <div class="filter-group">
+                <label for="city-filter">Filtrer par Ville :</label>
+                <select id="city-filter">
+                    <option value="">Toutes les villes</option>
+                    </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="type-filter">Filtrer par Type :</label>
+                <select id="type-filter">
+                    <option value="">Tous les types</option>
+                    </select>
+            </div>
+        </div>
+
+        <div id="events-list" class="events-list">
+            </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
